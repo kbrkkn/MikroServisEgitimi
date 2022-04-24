@@ -1,0 +1,68 @@
+app:
+  info:
+    bounded-context: restaurant-order
+    domain: restaurant
+    microservice: ${spring.application.name}
+eureka:
+  client:
+    fetch-registry: true
+    healthcheck:
+      enabled: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://127.0.0.1:5555/eureka/
+  instance:
+    prefer-ip-address: true
+  server:
+    enable-self-preservation: true
+management:
+  endpoint:
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+     exposure:
+        include: '*'
+server:
+  error:
+    include-binding-errors: always
+    include-exception: true
+    include-message: always
+    include-stacktrace: always
+  port: ${myport:10000}
+spring:
+  application:
+    name: order
+  config:
+    import: configserver:http://127.0.0.1:8888
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 1000
+        read-timeout: 5000
+        
+resilience4j:
+  retry:
+    metrics:
+      enabled: true
+    instances:
+      orderretry:
+        max-attempts: 20
+        wait-duration: '0s'
+        retry-exception-predicate: com.training.spring.resilience4j.RetryPredicate
+circuitbreaker:
+    metrics:
+      enabled: true
+    instances:
+      mycb:
+        sliding-window-type: count-based
+        sliding-window-size: 20
+        minimum-number-of-calls: 10
+        failure-rate-threshold: 30
+        wait-duration-in-open-state: '4s'
+        automatic-transition-from-open-to-half-open-enabled: false
+        permitted-number-of-calls-in-half-open-state: 10
+        max-wait-duration-in-half-open-state: '10s'
+        slow-call-duration-threshold: 500
+        slow-call-rate-threshold: 50

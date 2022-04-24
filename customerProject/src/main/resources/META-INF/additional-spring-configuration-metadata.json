@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "app.customer.prop.maxListSize",
+    "type": "java.lang.String",
+    "description": "A description for 'app.customer.prop.maxListSize'"
+  },
+  {
+    "name": "app.customer.prop.pageSize",
+    "type": "java.lang.String",
+    "description": "A description for 'app.customer.prop.pageSize'"
+  }
+]}
